@@ -17,5 +17,13 @@ ALLOWED_SENDERS = [
     if sender.strip()
 ]
 
-if not all([EMAIL_ADDRESS, EMAIL_PASSWORD, ALLOWED_SENDERS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID]):
-    raise ValueError("One or more environment variables are not set. Please check your .env file.")
+if not EMAIL_ADDRESS:
+    raise ValueError("EMAIL_ADDRESS environment variable is not set. Please check your .env file.")
+if not EMAIL_PASSWORD:
+    raise ValueError("EMAIL_PASSWORD environment variable is not set. Please check your .env file.")
+if not ALLOWED_SENDERS:
+    raise ValueError("ALLOWED_SENDERS environment variable is not set or empty. Please check your .env file.")
+if not TELEGRAM_BOT_TOKEN:
+    raise ValueError("TELEGRAM_BOT_TOKEN environment variable is not set. Please check your .env file.")
+if not TELEGRAM_CHANNEL_ID:
+    raise ValueError("TELEGRAM_CHANNEL_ID environment variable is not set. Please check your .env file.")
