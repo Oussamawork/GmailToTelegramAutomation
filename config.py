@@ -9,6 +9,7 @@ EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID")
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Split comma-separated emails into a list
 ALLOWED_SENDERS = [
@@ -27,3 +28,5 @@ if not TELEGRAM_BOT_TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN environment variable is not set. Please check your .env file.")
 if not TELEGRAM_CHANNEL_ID:
     raise ValueError("TELEGRAM_CHANNEL_ID environment variable is not set. Please check your .env file.")
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is not set. Please check your .env file.")
