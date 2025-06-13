@@ -7,7 +7,7 @@ from typing import Tuple, List
 
 def decode_text(text, encoding):
     if not encoding:
-        return text
+        return text.decode('utf-8', errors='ignore') if isinstance(text, bytes) else text
     if encoding.lower() == 'base64':
         return base64.b64decode(text).decode('utf-8', errors='ignore')
     elif encoding.lower() == 'quoted-printable':
@@ -25,23 +25,30 @@ def parse_subject(msg: Message) -> str:
 def parse_body(msg: Message) -> str:
     if msg.is_multipart():
         for part in msg.walk():
-            if part.get_content_type() == "text/plain" and "attachment" not in str(part.get("Content-Disposition", "")):
+            content_type = part.get_content_type()
+            content_disposition = str(part.get("Content-Disposition", ""))
+            if content_type == "text/plain" and "attachment" not in content_disposition:
                 payload = part.get_payload(decode=True)
-                encoding = part.get("Content-Transfer-Encoding", None)
-                return decode_text(payload, encoding)
+                if payload is not None:
+                    encoding = part.get("Content-Transfer-Encoding", None)
+                    return decode_text(payload, encoding or '')
     else:
         payload = msg.get_payload(decode=True)
-        encoding = msg.get("Content-Transfer-Encoding", None)
-        return decode_text(payload, encoding)
+        if payload is not None:
+            encoding = msg.get("Content-Transfer-Encoding", None)
+            return decode_text(payload, encoding or '')
     return ""
 
 def extract_urls(text: str) -> List[str]:
+    if isinstance(text, bytes):
+        text = text.decode('utf-8', errors='ignore')
     return re.findall(r'(https?://\S+)', text)
 
 def extract_attachments(msg: Message) -> List[Tuple[str, bytes]]:
     attachments = []
     for part in msg.walk():
-        if part.get("Content-Disposition") and "attachment" in part.get("Content-Disposition"):
+        content_disposition = str(part.get("Content-Disposition", ""))
+        if "attachment" in content_disposition:
             filename = part.get_filename()
             file_data = part.get_payload(decode=True)
             if filename and file_data:
