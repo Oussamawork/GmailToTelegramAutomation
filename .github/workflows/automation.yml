@@ -29,5 +29,5 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-          ALLOWED_SENDER: ${{ secrets.ALLOWED_SENDERS }}
+          ALLOWED_SENDERS: ${{ secrets.ALLOWED_SENDERS }}
         run: python main.py
